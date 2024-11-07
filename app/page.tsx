@@ -1,24 +1,13 @@
 "use client";
-import {
-  Accordion,
-  ActionIcon,
-  Box,
-  Button,
-  Center,
-  Checkbox,
-  Group,
-  Input,
-  Stack,
-  Text,
-  TextInput,
-} from "@mantine/core";
+import { Button, Center, Group, Stack, TextInput } from "@mantine/core";
 import { useState } from "react";
+import Task from "./components/Task";
 
-type task = {
-  id: Number;
-  name: String;
-  description: String;
-  completed: Boolean;
+export type task = {
+  id: number;
+  name: string;
+  description: string;
+  completed: boolean;
 };
 
 export default function Home() {
@@ -38,7 +27,7 @@ export default function Home() {
     setid(id + 1);
     updateTask();
   }
-  function toggle(id: Number) {
+  function toggle(id: number) {
     setTasks((prev) =>
       prev.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
@@ -47,7 +36,7 @@ export default function Home() {
     updateTask();
   }
 
-  function removeTask(id: Number) {
+  function removeTask(id: number) {
     let newTasks = tasks.filter((task) => task.id != id);
     setTasks(newTasks);
     updateTask();
@@ -62,7 +51,7 @@ export default function Home() {
   return (
     <div>
       <Center h="100vh" bg="#7048e8">
-        <Stack key={123} bg="#FFFFFF" p={50} style={{ borderRadius: "10px" }}>
+        <Stack bg="#FFFFFF" p={50} style={{ borderRadius: "10px" }}>
           All Tasks = {allTasks}, Completed Tasks = {completedTasks},
           Uncompleted Tasks = {uncompletedTasks}
           <Group>
@@ -90,22 +79,12 @@ export default function Home() {
           </Group>
           {/* Tasks List */}
           {tasks.map((task) => (
-            <div>
-              <Checkbox
-                label={task.name}
-                description={task.description}
-                size="md"
-                onChange={() => toggle(task.id)}
-                bg={task.completed == true ? "green" : "white"}
-              />
-              <Button
-                color="#f03e3e"
-                variant="outline"
-                onClick={() => removeTask(task.id)}
-              >
-                Remove
-              </Button>
-            </div>
+            <Task
+              key={task.id}
+              task={task}
+              toggle={toggle}
+              removeTask={removeTask}
+            ></Task>
           ))}
         </Stack>
       </Center>
