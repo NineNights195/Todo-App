@@ -27,11 +27,16 @@ export default function Home() {
   const [description, setdescription] = useState("");
   const [id, setid] = useState(0);
 
+  let allTasks = tasks.length;
+  let completedTasks = tasks.filter((task) => task.completed).length;
+  let uncompletedTasks = tasks.length - completedTasks;
+
   function addTasks() {
     let task = { id: id + 1, name, description, completed: false };
     let newTasks = [...tasks, task];
     setTasks(newTasks);
     setid(id + 1);
+    updateTask();
   }
   function toggle(id: Number) {
     setTasks((prev) =>
@@ -39,21 +44,35 @@ export default function Home() {
         task.id === id ? { ...task, completed: !task.completed } : task
       )
     );
+    updateTask();
   }
 
   function removeTask(id: Number) {
     let newTasks = tasks.filter((task) => task.id != id);
     setTasks(newTasks);
+    updateTask();
+  }
+
+  function updateTask() {
+    allTasks = tasks.length;
+    completedTasks = tasks.filter((task) => task.completed).length;
+    uncompletedTasks = tasks.length - completedTasks;
   }
 
   return (
-    <>
+    <div>
       <Center h="100vh" bg="#7048e8">
         <Stack key={123} bg="#FFFFFF" p={50} style={{ borderRadius: "10px" }}>
+          All Tasks = {allTasks}, Completed Tasks = {completedTasks},
+          Uncompleted Tasks = {uncompletedTasks}
           <Group>
-            <ActionIcon size="input-sm" onClick={() => addTasks()}>
+            <Button
+              size="input-sm"
+              onClick={() => addTasks()}
+              disabled={name.length === 0}
+            >
               Add
-            </ActionIcon>
+            </Button>
             <Stack>
               <TextInput
                 placeholder="Name"
@@ -69,10 +88,9 @@ export default function Home() {
               />
             </Stack>
           </Group>
-
           {/* Tasks List */}
           {tasks.map((task) => (
-            <>
+            <div>
               <Checkbox
                 label={task.name}
                 description={task.description}
@@ -87,10 +105,10 @@ export default function Home() {
               >
                 Remove
               </Button>
-            </>
+            </div>
           ))}
         </Stack>
       </Center>
-    </>
+    </div>
   );
 }
