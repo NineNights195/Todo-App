@@ -22,22 +22,18 @@ type task = {
 };
 
 export default function Home() {
-  const [tasks, setTasks] = useState([
-    { id: 1, name: "task1", description: "Lorem Ipsum", completed: false },
-    { id: 2, name: "task2", description: "Lorem Ipsum", completed: false },
-    { id: 3, name: "task3", description: "Lorem Ipsum", completed: false },
-    { id: 4, name: "task4", description: "Lorem Ipsum", completed: false },
-    { id: 5, name: "task5", description: "Lorem Ipsum", completed: false },
-  ]);
+  const [tasks, setTasks] = useState<task[]>([]);
   const [name, setname] = useState("");
   const [description, setdescription] = useState("");
+  const [id, setid] = useState(0);
 
   function addTasks() {
-    let task = { id: tasks.length + 1, name, description, completed: false };
+    let task = { id: id + 1, name, description, completed: false };
     let newTasks = [...tasks, task];
     setTasks(newTasks);
+    setid(id + 1);
   }
-  function toggle(id: number) {
+  function toggle(id: Number) {
     setTasks((prev) =>
       prev.map((task) =>
         task.id === id ? { ...task, completed: !task.completed } : task
@@ -45,10 +41,15 @@ export default function Home() {
     );
   }
 
+  function removeTask(id: Number) {
+    let newTasks = tasks.filter((task) => task.id != id);
+    setTasks(newTasks);
+  }
+
   return (
     <>
       <Center h="100vh" bg="#7048e8">
-        <Stack bg="#FFFFFF" p={50} style={{ borderRadius: "10px" }}>
+        <Stack key={123} bg="#FFFFFF" p={50} style={{ borderRadius: "10px" }}>
           <Group>
             <ActionIcon size="input-sm" onClick={() => addTasks()}>
               Add
@@ -71,13 +72,22 @@ export default function Home() {
 
           {/* Tasks List */}
           {tasks.map((task) => (
-            <Checkbox
-              label={task.name}
-              description={task.description}
-              size="md"
-              onChange={() => toggle(task.id)}
-              bg={task.completed == true ? "green" : "white"}
-            />
+            <>
+              <Checkbox
+                label={task.name}
+                description={task.description}
+                size="md"
+                onChange={() => toggle(task.id)}
+                bg={task.completed == true ? "green" : "white"}
+              />
+              <Button
+                color="#f03e3e"
+                variant="outline"
+                onClick={() => removeTask(task.id)}
+              >
+                Remove
+              </Button>
+            </>
           ))}
         </Stack>
       </Center>
