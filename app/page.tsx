@@ -1,7 +1,8 @@
 "use client";
-import { Button, Center, Group, Stack, TextInput } from "@mantine/core";
+import { Button, Center, Group, Stack, TextInput, Text } from "@mantine/core";
 import { useState } from "react";
 import Task from "./components/Task";
+import InputFields from "./components/InputFields";
 
 export type task = {
   id: number;
@@ -52,8 +53,10 @@ export default function Home() {
     <div>
       <Center h="100vh" bg="#7048e8">
         <Stack bg="#FFFFFF" p={50} style={{ borderRadius: "10px" }}>
-          All Tasks = {allTasks}, Completed Tasks = {completedTasks},
-          Uncompleted Tasks = {uncompletedTasks}
+          <Text size="lg" fw={500}>
+            Tasks: {allTasks}, Completed: {completedTasks}, Uncompleted:{" "}
+            {uncompletedTasks}
+          </Text>
           <Group>
             <Button
               size="input-sm"
@@ -62,20 +65,12 @@ export default function Home() {
             >
               Add
             </Button>
-            <Stack>
-              <TextInput
-                placeholder="Name"
-                size="sm"
-                value={name}
-                onChange={(event) => setname(event.target.value)}
-              />
-              <TextInput
-                placeholder="Description"
-                size="sm"
-                value={description}
-                onChange={(event) => setdescription(event.target.value)}
-              />
-            </Stack>
+            <InputFields
+              name={name}
+              description={description}
+              setName={setname}
+              setDescription={setdescription}
+            />
           </Group>
           {/* Tasks List */}
           {tasks.map((task) => (
